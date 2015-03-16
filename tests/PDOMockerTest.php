@@ -11,16 +11,16 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
         $this->pdoMocker
              ->registerQuery(
                  "SELECT * FROM someTable WHERE id=1",
-                 array(array('id'=>1, 'name'=>'someValue')))
+                 [['id'=>1, 'name'=>'someValue']])
              ->registerQuery(
                  "SELECT * FROM someTable WHERE id=2",
-                 array(array('id'=>2, 'name'=>'someOtherValue')))                 
+                 [['id'=>2, 'name'=>'someOtherValue']])                 
              ->registerQuery(
                  "SELECT * FROM someTable",
-                 array(
-                     array('id'=>1, 'name'=>'someValue'),
-                     array('id'=>2, 'name'=>'someOtherValue')
-                 ));
+                 [
+                     ['id'=>1, 'name'=>'someValue'],
+                     ['id'=>2, 'name'=>'someOtherValue']
+                 ]);
     }
     
     protected function tearDown()
