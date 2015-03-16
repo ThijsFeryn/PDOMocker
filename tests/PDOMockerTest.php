@@ -1,6 +1,8 @@
 <?php
 namespace PDOMocker\tests;
+require_once __DIR__.'/../vendor/autoload.php';
 use PDOMocker\Mocker;
+
 class PDOMockerTest extends \PHPUnit_Framework_TestCase 
 {    
     protected function setUp()
@@ -80,18 +82,13 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array',$fetch);
         $this->assertEquals(1,$fetch['id']);
         $this->assertEquals('someValue',$fetch['name']); 
-        
-        $fetch = $stmt->fetch();
-        $this->assertInternalType('array',$fetch);
-        $this->assertEquals(2,$fetch['id']);
-        $this->assertEquals('someOtherValue',$fetch['name']);        
-
+      
         $fetchAll = $stmt->fetchAll();
         $this->assertInternalType('array',$fetchAll);
         $this->assertCount(2,$fetchAll);
         $this->assertEquals(1,$fetchAll[0]['id']);
-        $this->assertEquals('someValue',$fetchAll[1]['name']);
-        $this->assertEquals(2,$fetchAll[0]['id']);
+        $this->assertEquals('someValue',$fetchAll[0]['name']);
+        $this->assertEquals(2,$fetchAll[1]['id']);
         $this->assertEquals('someOtherValue',$fetchAll[1]['name']);        
     }        
 }
