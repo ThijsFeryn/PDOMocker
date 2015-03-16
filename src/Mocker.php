@@ -82,7 +82,7 @@ class Mocker
     public function getMock($expectedClass=null)
     {       
         $methods = array('query', 'beginTransaction', 'commit', 'inTransaction', 'rollback', 'setAttribute');
-        $constructor = array('sqlite:dbname=:memory');
+        $constructor = array('sqlite::memory:');
         
         if(null !== $expectedClass) {
             $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor, $expectedClass);            
