@@ -1,5 +1,5 @@
 {
-    "name": "ThijsFeryn/PDOMocker",
+    "name": "thijsferyn/pdomocker",
     "description": "A PDO mocking framework for PHPUnit",
     "type": "library",
     "keywords": [
