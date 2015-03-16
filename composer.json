@@ -1,0 +1,36 @@
+{
+    "name": "ThijsFeryn/PDOMocker",
+    "description": "A PDO mocking framework for PHPUnit",
+    "type": "library",
+    "keywords": [
+        "phpunit",
+        "pdo",
+        "mocking",
+        "mock",
+        "testing"
+    ],
+    "homepage": "https://github.com/ThijsFeryn/PDOMocker",
+    "authors": [
+        {
+            "name": "Thijs Feryn",
+            "email": "thijs@feryn.eu",
+            "role": "lead"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ThijsFeryn/PDOMocker/issues"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "phpunit/phpunit-mock-objects": "~2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.4.*@dev"
+    },    
+    "autoload": {
+        "psr-4": {
+            "PDOMocker\\": "src/"
+        }
+    }
+}
