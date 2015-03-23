@@ -73,9 +73,9 @@ class Mocker
     }    
     
     
-    public function registerQuery($sql,$resultSet)
+    public function registerQuery(Query $query)
     {
-        $this->queries[preg_replace('/\s+/', ' ', $sql)] = $resultSet;
+        $this->queries[$query->getSql()] = $query;
         return $this;
     }    
     
