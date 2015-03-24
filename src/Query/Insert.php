@@ -10,6 +10,6 @@ class Insert extends Query
             $row->setVisible(true);             
         }
          
-        return $this;
+        return $this->rows;
     }
 }

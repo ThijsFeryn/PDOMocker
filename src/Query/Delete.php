@@ -10,6 +10,6 @@ class Delete extends Query
              $row->setVisible(false);               
          }
          
-         return $this;
+         return array();
     }
 }

@@ -1,11 +1,11 @@
 <?php
 namespace PDOMocker;
-class Row implements \ArrayAccess
+class Row
 {
     protected $row; 
     protected $visible = true;
     
-    public function __construct($row, $visible=true)
+    public function __construct($row=array(), $visible=true)
     {
         $this->row = (array)$row;
         $this->visible = $visible;
@@ -28,27 +28,8 @@ class Row implements \ArrayAccess
         return $this;
     }  
     
-    public function offsetSet($offset, $value) 
+    public function getRow()
     {
-        if (is_null($offset)) {
-            $this->row[] = $value;
-        } else {
-            $this->row[$offset] = $value;
-        }
+        return $this->row;
     }
-
-    public function offsetExists($offset) 
-    {
-        return isset($this->row[$offset]);
-    }
-
-    public function offsetUnset($offset) 
-    {
-        unset($this->row[$offset]);
-    }
-
-    public function offsetGet($offset) 
-    {
-        return isset($this->row[$offset]) ? $this->row[$offset] : null;
-    }      
 }

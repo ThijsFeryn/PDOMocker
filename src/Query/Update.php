@@ -1,6 +1,7 @@
 <?php
 namespace PDOMocker\Query;
 use PDOMocker\Query;
+use PDOMocker\Row;
 
 class Update extends Query
 {
@@ -26,6 +27,6 @@ class Update extends Query
              $row->setRow($this->updatedRows[$index]);               
          }
          
-         return $this;
+         return $this->rows;
     }
 }

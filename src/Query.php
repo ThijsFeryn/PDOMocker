@@ -1,7 +1,7 @@
 <?php
 namespace PDOMocker;
 
-abstract class Query implements \ArrayAccess
+abstract class Query
 {
     protected $sql;
     protected $rows = array(); 
@@ -27,29 +27,5 @@ abstract class Query implements \ArrayAccess
     public function __toString()
     {
         return $this->sql;
-    }
-    
-    public function offsetSet($offset, $value) 
-    {
-        if (is_null($offset)) {
-            $this->rows[] = $value;
-        } else {
-            $this->rows[$offset] = $value;
-        }
-    }
-
-    public function offsetExists($offset) 
-    {
-        return isset($this->rows[$offset]);
-    }
-
-    public function offsetUnset($offset) 
-    {
-        unset($this->rows[$offset]);
-    }
-
-    public function offsetGet($offset) 
-    {
-        return isset($this->rows[$offset]) && $this->rows[$offset]->isVisible() ? $this->rows[$offset] : null;
-    }   
+    }    
 }
