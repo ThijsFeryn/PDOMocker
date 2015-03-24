@@ -1,9 +1,3 @@
-[![Build Status](https://travis-ci.org/ThijsFeryn/PDOMocker.svg?branch=master)](https://travis-ci.org/ThijsFeryn/PDOMocker)
-# PDOMocker
-A PDO mocking wrapper around [PHPUnit_MockObject](https://github.com/sebastianbergmann/phpunit-mock-objects)
-
-## Example code
-```php
 <?php
 namespace PDOMocker;
 
@@ -89,4 +83,3 @@ $pdo->query('DELETE FROM someTable WHERE id=1');
  */
 $stmt = $pdo->query("SELECT * FROM someTable WHERE id=1");
 var_dump($stmt->fetchAll());
-```

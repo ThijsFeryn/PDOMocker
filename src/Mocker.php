@@ -45,7 +45,11 @@ class Mocker
     {
         return function() {
             $sql = preg_replace('/\s+/', ' ', func_get_args()[0]);            
-            return $this->createPdoStatement(isset($this->queries[$sql])?$this->queries[$sql]:array());
+            return $this->createPdoStatement(
+                isset($this->queries[$sql])?
+                    $this->queries[$sql]->execute():
+                    array()
+                );
         }; 
     }
     
@@ -68,14 +72,16 @@ class Mocker
     protected function processCommitAndInTransaction()
     {
         return function() {
-            return $this->transactionStarted;
+            $transactionStarted = $this->transactionStarted;
+            $this->transactionStarted = false;
+            return $transactionStarted;
         };
     }    
     
     
-    public function registerQuery($sql,$resultSet)
+    public function registerQuery(Query $query)
     {
-        $this->queries[preg_replace('/\s+/', ' ', $sql)] = $resultSet;
+        $this->queries[$query->getSql()] = $query;
         return $this;
     }    
     
