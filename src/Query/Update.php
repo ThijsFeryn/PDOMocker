@@ -7,9 +7,9 @@ class Update extends Query
 {
     protected $updatedRows = array();
     
-    public function __construct($sql, $rows=array(), $updatedRows=array())
+    public function __construct($sql, $rows=array(), $updatedRows=array(), \Exception $exception=null)
     {
-        parent::__construct($sql,$rows);
+        parent::__construct($sql, $rows, $exception);
         if(count($rows) != count($updatedRows) && count($updatedRows) > 0) {
             throw new Exception("Row count for rows and updated rows should be the same");             
         }
@@ -23,10 +23,14 @@ class Update extends Query
     
     public function execute()
     {
-         foreach($this->rows as $index=>$row) {
-             $row->setRow($this->updatedRows[$index]);               
-         }
+        if($this->exception !== null) {
+            throw $this->exception;
+        }        
          
-         return $this->rows;
+        foreach($this->rows as $index=>$row) {
+            $row->setRow($this->updatedRows[$index]);               
+        }
+         
+        return $this->rows;
     }
 }
