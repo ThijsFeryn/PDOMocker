@@ -186,4 +186,13 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
         $pdo = $this->pdoMocker->getMock();        
         $pdo->query("INSERT INTO bla (id,name) VALUES(1,'someValue')");
     }
+    
+    public function testLastInsertId()
+    {
+        $pdo = $this->pdoMocker->getMock();
+        $this->assertEquals(0,$pdo->lastInsertId());
+        $this->pdoMocker->setLastInsertId(1);
+        $pdo = $this->pdoMocker->getMock();        
+        $this->assertEquals(1,$pdo->lastInsertId());        
+    }
 }

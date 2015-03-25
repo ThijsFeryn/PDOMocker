@@ -10,6 +10,7 @@ class Mocker
     protected $mockGenerator = null;
     protected $queries = array();
     protected $transactionStarted = false;
+    protected $lastInsertId = 0;
     
     public function __construct()
     {
@@ -77,17 +78,29 @@ class Mocker
             return $transactionStarted;
         };
     }    
-    
-    
+           
     public function registerQuery(Query $query)
     {
         $this->queries[$query->getSql()] = $query;
         return $this;
     }    
     
+    public function setLastInsertId($lastInsertId)
+    {
+        $this->lastInsertId = (int)$lastInsertId;
+        return $this;
+    }    
+    
     public function getMock($expectedClass=null)
     {       
-        $methods = array('query', 'beginTransaction', 'commit', 'inTransaction', 'rollback', 'setAttribute');
+        $methods = array(
+            'query', 
+            'beginTransaction', 
+            'commit', 
+            'inTransaction', 
+            'rollback', 
+            'setAttribute',
+            'lastInsertId');
         $constructor = array('sqlite::memory:');
         
         if(null !== $expectedClass) {
@@ -116,9 +129,13 @@ class Mocker
              ->method('rollBack')
              ->will(new ReturnCallback($this->processRollback()));     
 
-         $mock->expects(new Any)
-              ->method('setAttribute')
-              ->will(new ReturnValue(true));
+        $mock->expects(new Any)
+             ->method('setAttribute')
+             ->will(new ReturnValue(true));
+              
+        $mock->expects(new Any)
+             ->method('lastInsertId')
+             ->will(new ReturnValue($this->lastInsertId));
              
         return $mock;
     }
