@@ -19,4 +19,14 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $query = new SelectQuery('bla');        
         $this->assertEquals('bla',(string)$query);
     }
+    
+    /**
+     * @expectedException        PDOException
+     * @expectedExceptionMessage someError
+     */     
+    public function testThrowException()
+    {
+        $query = new SelectQuery('bla',array(),new \PDOException('someError'));
+        $query->execute();
+    }    
 }

@@ -17,6 +17,8 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
         
         $rowTestInsert = new Row(['id'=>3, 'name'=>'yetAnotherValue'],false);
         $rowTestUpdate = new Row(['id'=>1, 'name'=>'newValue']);        
+        
+        $exception = new \PDOException('someError',1);
                                         
         $this->pdoMocker = new Mocker(); 
         $this->pdoMocker
@@ -26,7 +28,8 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
             ->registerQuery(new SelectQuery('SELECT * FROM someOtherTable WHERE id=3',[$rowTestInsert]))
             ->registerQuery(new InsertQuery("INSERT INTO someOtherTable (id,name) VALUES(3,'yetAnotherValue')",[$rowTestInsert]))
             ->registerQuery(new DeleteQuery('DELETE FROM someTable WHERE id=1',[$rowSomeValue]))                                                            
-            ->registerQuery(new UpdateQuery("UPDATE someTable SET name='newValue' WHERE id=1",[$rowSomeValue],[$rowTestUpdate]));                                                                        
+            ->registerQuery(new UpdateQuery("UPDATE someTable SET name='newValue' WHERE id=1",[$rowSomeValue],[$rowTestUpdate]))
+            ->registerQuery(new InsertQuery("INSERT INTO bla (id,name) VALUES(1,'someValue')",[],$exception));                                                                        
     }
     
     protected function tearDown()
@@ -173,5 +176,14 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($pdo->rollback());
         $this->assertFalse($pdo->rollback());                                
         $this->assertFalse($pdo->commit());        
+    }
+    /**
+     * @expectedException        PDOException
+     * @expectedExceptionMessage someError
+     */    
+    public function testThrowException()
+    {
+        $pdo = $this->pdoMocker->getMock();        
+        $pdo->query("INSERT INTO bla (id,name) VALUES(1,'someValue')");
     }
 }
