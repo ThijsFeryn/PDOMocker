@@ -19,12 +19,16 @@ $updatedRows = [
     new Row(['id'=>2, 'name'=>'otherNewValue'],false)
 ];
 
+$exception = new \PDOException('someError');
+
 $mocker = new Mocker(); 
 $mocker
-    ->registerQuery(new Query\Select('SELECT * FROM someTable WHERE id=1',$rows))
-    ->registerQuery(new Query\Insert('INSERT INTO someTable WHERE id=1',$rows))
-    ->registerQuery(new Query\Update('UPDATE someTable WHERE id=1',$rows,$updatedRows))    
-    ->registerQuery(new Query\Delete('DELETE FROM someTable WHERE id=1',$rows));    
+    ->registerQuery(new Query\Select('SELECT * FROM someTable WHERE id=1',[$rows[0]]))
+    ->registerQuery(new Query\Select('SELECT * FROM someTable',$rows))    
+    ->registerQuery(new Query\Insert("INSERT INTO someTable (id,name) VALUES (1,'someValue')",[$rows[0]]))
+    ->registerQuery(new Query\Update('UPDATE someTable WHERE id=1',[$rows[0]],[$updatedRows[0]]))    
+    ->registerQuery(new Query\Insert("INSERT INTO otherTable (id,name) VALUES (1,'someValue')",[],$exception))
+    ->registerQuery(new Query\Delete('DELETE FROM someTable WHERE id=1',[$rows[0]]));        
         
 $pdo = $mocker->getMock();  
 
@@ -35,7 +39,7 @@ $stmt = $pdo->query("SELECT * FROM someTable WHERE id=1");
  */
 var_dump($stmt->fetchAll());
 
-$pdo->query('INSERT INTO someTable WHERE id=1');                
+$pdo->query("INSERT INTO someTable (id,name) VALUES (1,'someValue')"); 
 
 $stmt = $pdo->query("SELECT * FROM someTable WHERE id=1");
 /**
@@ -46,13 +50,6 @@ $stmt = $pdo->query("SELECT * FROM someTable WHERE id=1");
  *    int(1)
  *    'name' =>
  *    string(9) "someValue"
- *  }
- *  [1] =>
- *  array(2) {
- *    'id' =>
- *    int(2)
- *    'name' =>
- *    string(14) "someOtherValue"
  *  }
  *}
  */
@@ -70,13 +67,6 @@ $stmt = $pdo->query("SELECT * FROM someTable WHERE id=1");
  *    'name' =>
  *    string(9) "newValue"
  *  }
- *  [1] =>
- *  array(2) {
- *    'id' =>
- *    int(2)
- *    'name' =>
- *    string(14) "otherNewValue"
- *  }
  *}
  */
 var_dump($stmt->fetchAll());
@@ -89,4 +79,13 @@ $pdo->query('DELETE FROM someTable WHERE id=1');
  */
 $stmt = $pdo->query("SELECT * FROM someTable WHERE id=1");
 var_dump($stmt->fetchAll());
+
+/**
+ * string(9) "someError"
+ */
+try {
+    $pdo->query("INSERT INTO otherTable (id,name) VALUES (1,'someValue')");    
+} catch(\PDOException $e) {
+    var_dump($e->getMessage());
+}
 ```
