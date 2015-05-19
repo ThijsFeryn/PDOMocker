@@ -27,9 +27,10 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
             ->registerQuery(new SelectQuery('SELECT * FROM someTable',[$rowSomeValue, $rowSomeOtherValue]))
             ->registerQuery(new SelectQuery('SELECT * FROM someOtherTable WHERE id=3',[$rowTestInsert]))
             ->registerQuery(new InsertQuery("INSERT INTO someOtherTable (id,name) VALUES(3,'yetAnotherValue')",[$rowTestInsert]))
+            ->registerQuery(new InsertQuery("INSERT INTO someOtherTable (id,name) VALUES(:id,:name)",[$rowTestInsert]))                
             ->registerQuery(new DeleteQuery('DELETE FROM someTable WHERE id=1',[$rowSomeValue]))                                                            
             ->registerQuery(new UpdateQuery("UPDATE someTable SET name='newValue' WHERE id=1",[$rowSomeValue],[$rowTestUpdate]))
-            ->registerQuery(new InsertQuery("INSERT INTO bla (id,name) VALUES(1,'someValue')",[],$exception));                                                                        
+            ->registerQuery(new InsertQuery("INSERT INTO bla (id,name) VALUES(1,'someValue')",[],$exception));                                                                              
     }
     
     protected function tearDown()
@@ -119,6 +120,28 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3,$fetch['id']);
         $this->assertEquals('yetAnotherValue',$fetch['name']);                 
     }  
+    
+    public function testInsertPrepared()
+    {
+        $pdo = $this->pdoMocker->getMock();                  
+        $stmt = $pdo->query("SELECT * FROM someOtherTable WHERE id=3");  
+        $this->assertInstanceOf('PDOStatement', $stmt);   
+        $this->assertEquals(0,$stmt->rowCount());      
+        
+        $stmt = $pdo->prepare("INSERT INTO someOtherTable (id,name) VALUES(:id,:name)");  
+        $stmt->bindValue(':id',3,\PDO::PARAM_INT);
+        $stmt->bindValue(':name','yetAnotherValue',\PDO::PARAM_STR);
+        $stmt->execute();        
+
+        $stmt = $pdo->query("SELECT * FROM someOtherTable WHERE id=3");  
+        $this->assertInstanceOf('PDOStatement', $stmt);   
+        $this->assertEquals(1,$stmt->rowCount());      
+        
+        $fetch = $stmt->fetch();
+        $this->assertInternalType('array',$fetch);
+        $this->assertEquals(3,$fetch['id']);
+        $this->assertEquals('yetAnotherValue',$fetch['name']);                 
+    }     
     
     public function testDelete()
     {

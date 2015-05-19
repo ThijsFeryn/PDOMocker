@@ -19,7 +19,7 @@ class Mocker
     
     protected function createPdoStatement($resultSet = array())
     {
-        $pdoStatement = $this->mockGenerator->getMock('PDOStatement',array ('fetchAll','fetch','rowCount'));
+        $pdoStatement = $this->mockGenerator->getMock('PDOStatement',array ('fetchAll','fetch','rowCount','bindValue','execute'));
         
         if(count($resultSet) == 0) {
             $fetch = new ReturnValue(false);
@@ -37,7 +37,15 @@ class Mocker
 
         $pdoStatement->expects(new Any)
                      ->method('rowCount')
-                     ->will(new ReturnValue(count($resultSet)));                                       
+                     ->will(new ReturnValue(count($resultSet)));
+        
+        $pdoStatement->expects(new Any)
+                     ->method('bindValue')
+                     ->will(new ReturnValue(true));
+        
+        $pdoStatement->expects(new Any)
+                     ->method('execute')
+                     ->will(new ReturnValue(true));                                                         
                      
         return $pdoStatement;                               
     }    
@@ -95,6 +103,7 @@ class Mocker
     {       
         $methods = array(
             'query', 
+            'prepare',             
             'beginTransaction', 
             'commit', 
             'inTransaction', 
@@ -112,6 +121,10 @@ class Mocker
         $mock->expects(new Any)
              ->method('query')
              ->will(new ReturnCallback($this->processQueryResultSet()));
+        
+        $mock->expects(new Any)
+             ->method('prepare')
+             ->will(new ReturnCallback($this->processQueryResultSet()));        
              
         $mock->expects(new Any)
              ->method('beginTransaction')
