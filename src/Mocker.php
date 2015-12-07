@@ -53,7 +53,7 @@ class Mocker
     protected function processQueryResultSet()
     {
         return function() {
-            $sql = preg_replace('/\s+/', ' ', func_get_args()[0]);            
+            $sql = preg_replace('/\s+/', ' ', func_get_args()[0]);
             return $this->createPdoStatement(
                 isset($this->queries[$sql])?
                     $this->queries[$sql]->execute():

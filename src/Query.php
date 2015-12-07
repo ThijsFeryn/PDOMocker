@@ -1,6 +1,8 @@
 <?php
 namespace PDOMocker;
 
+use PDOMocker\Row\RowInterface;
+
 abstract class Query
 {
     protected $sql;
@@ -11,8 +13,8 @@ abstract class Query
     {
         $this->sql = preg_replace('/\s+/', ' ', $sql);
         foreach($rows as $row) {
-            if(!$row instanceof Row) {
-                throw new Exception("Row is not an instance of PDOMocker\Row");                
+            if(!$row instanceof RowInterface) {
+                throw new Exception("Row is not an instance of PDOMocker\\Row\\RowInterface");
             }
         }
         $this->rows = $rows;              

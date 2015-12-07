@@ -1,8 +1,10 @@
 <?php
 namespace PDOMocker;
-class Row
+use PDOMocker\Row\RowInterface;
+
+class Row implements RowInterface
 {
-    protected $row; 
+    protected $row;
     protected $visible = true;
     
     public function __construct($row=array(), $visible=true)
