@@ -4,7 +4,11 @@ require_once __DIR__.'/../vendor/autoload.php';
 use PDOMocker\Row;
 
 class RowTest extends \PHPUnit_Framework_TestCase 
-{    
+{
+    public function testInterface()
+    {
+        $this->assertInstanceOf('PDOMocker\Row\RowInterface',new Row);
+    }
     public function testVisibility()
     {         
         $row = new Row(['id'=>1, 'name'=>'someValue']);
