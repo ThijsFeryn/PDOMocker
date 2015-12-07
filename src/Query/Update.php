@@ -15,7 +15,7 @@ class Update extends Query
         }
         foreach($updatedRows as $row) {
             if(!$row instanceof Row) {
-                throw new Exception("Row is not an instance of PDOMocker\Row");                
+                throw new Exception("Row is not an instance of PDOMocker\\Row");
             }
         }
         $this->updatedRows = $updatedRows;
@@ -23,6 +23,7 @@ class Update extends Query
     
     public function execute()
     {
+        $this->executionCount++;
         if($this->exception !== null) {
             throw $this->exception;
         }        

@@ -61,6 +61,12 @@ class Mocker
                 );
         }; 
     }
+
+    public function getExecutionCount($sql)
+    {
+        $filteredSql = preg_replace('/\s+/', ' ', $sql);
+        return isset($this->queries[$filteredSql])?$this->queries[$filteredSql]->getExecutionCount():0;
+    }
     
     protected function processBeginTransaction()
     {

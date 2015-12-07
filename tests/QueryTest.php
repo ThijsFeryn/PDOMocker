@@ -84,5 +84,15 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('otherValue',$rows[0]['key']);
         $this->assertArrayNotHasKey(1,$rows);
     }
+
+    public function testExecutionCount()
+    {
+        $query = new SelectQuery('bla');
+        $this->assertEquals(0,$query->getExecutionCount());
+        $query->execute();
+        $this->assertEquals(1,$query->getExecutionCount());
+        $query->execute();
+        $this->assertEquals(2,$query->getExecutionCount());
+    }
 }
 
