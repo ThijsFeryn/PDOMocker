@@ -8,7 +8,6 @@ abstract class Query
     protected $sql;
     protected $rows = array(); 
     protected $exception;
-    protected $executionCount=0;
     
     public function __construct($sql, $rows=array(), \Exception $exception=null)
     {
@@ -34,10 +33,5 @@ abstract class Query
     public function __toString()
     {
         return $this->sql;
-    }
-
-    public function getExecutionCount()
-    {
-        return $this->executionCount;
     }
 }

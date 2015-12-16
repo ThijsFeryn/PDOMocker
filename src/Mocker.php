@@ -9,6 +9,7 @@ class Mocker
 {
     protected $mockGenerator = null;
     protected $queries = array();
+    protected $queryCounter = array();
     protected $transactionStarted = false;
     protected $lastInsertId = 0;
     
@@ -54,6 +55,13 @@ class Mocker
     {
         return function() {
             $sql = preg_replace('/\s+/', ' ', func_get_args()[0]);
+
+            if(isset($this->queryCounter[$sql])) {
+                $this->queryCounter[$sql]++;
+            } else {
+                $this->queryCounter[$sql] = 1;
+            }
+
             return $this->createPdoStatement(
                 isset($this->queries[$sql])?
                     $this->queries[$sql]->execute():
@@ -65,7 +73,7 @@ class Mocker
     public function getExecutionCount($sql)
     {
         $filteredSql = preg_replace('/\s+/', ' ', $sql);
-        return isset($this->queries[$filteredSql])?$this->queries[$filteredSql]->getExecutionCount():0;
+        return isset($this->queryCounter[$filteredSql])?$this->queryCounter[$filteredSql]:0;
     }
     
     protected function processBeginTransaction()

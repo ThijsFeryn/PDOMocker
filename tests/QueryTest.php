@@ -48,12 +48,12 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                     [
                         new Row(
                             [
-                                'key'=>'value'
+                                'key' => 'value'
                             ]
                         ),
                         new Row(
                             [
-                                'key'=>'otherValue'
+                                'key' => 'otherValue'
                             ]
                         )
                     ]
@@ -62,12 +62,12 @@ class QueryTest extends \PHPUnit_Framework_TestCase
                     [
                         new Row(
                             [
-                                'key'=>'yetAnotherValue',
+                                'key' => 'yetAnotherValue',
                             ]
                         ),
                         new Row(
                             [
-                                'key'=>'andYetAnotherValue'
+                                'key' => 'andYetAnotherValue'
                             ],
                             false
                         )
@@ -77,22 +77,12 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         );
 
         $rows = $query->execute();
-        $this->assertEquals('value',$rows[0]['key']);
-        $this->assertEquals('yetAnotherValue',$rows[1]['key']);
+        $this->assertEquals('value', $rows[0]['key']);
+        $this->assertEquals('yetAnotherValue', $rows[1]['key']);
 
         $rows = $query->execute();
-        $this->assertEquals('otherValue',$rows[0]['key']);
-        $this->assertArrayNotHasKey(1,$rows);
-    }
-
-    public function testExecutionCount()
-    {
-        $query = new SelectQuery('bla');
-        $this->assertEquals(0,$query->getExecutionCount());
-        $query->execute();
-        $this->assertEquals(1,$query->getExecutionCount());
-        $query->execute();
-        $this->assertEquals(2,$query->getExecutionCount());
+        $this->assertEquals('otherValue', $rows[0]['key']);
+        $this->assertArrayNotHasKey(1, $rows);
     }
 }
 

@@ -6,7 +6,6 @@ class Delete extends Query
 {
     public function execute()
     {
-        $this->executionCount++;
         if($this->exception !== null) {
             throw $this->exception;
         }        
