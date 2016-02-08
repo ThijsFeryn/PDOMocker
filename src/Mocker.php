@@ -75,6 +75,11 @@ class Mocker
         $filteredSql = preg_replace('/\s+/', ' ', $sql);
         return isset($this->queryCounter[$filteredSql])?$this->queryCounter[$filteredSql]:0;
     }
+
+    public function getExecutedSqlStatements()
+    {
+        return array_keys($this->queries);
+    }
     
     protected function processBeginTransaction()
     {
