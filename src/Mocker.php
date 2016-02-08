@@ -130,10 +130,17 @@ class Mocker
             'setAttribute',
             'lastInsertId');
         $constructor = array('sqlite::memory:');
-        $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor);
+
 
         if(null !== $expectedClass) {
-            class_alias(get_class($mock),$expectedClass);
+            if(strpos($expectedClass,'\\')) {
+                $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor);
+                class_alias(get_class($mock),$expectedClass);
+            } else {
+                $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor, $expectedClass);
+            }
+        } else {
+            $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor);
         }
 
         $mock->expects(new Any)
