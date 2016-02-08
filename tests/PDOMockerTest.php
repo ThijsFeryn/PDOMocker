@@ -44,10 +44,15 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->pdoMocker);                
     }
-    
+
     public function testSelectedClass()
     {
         $this->assertInstanceOf('Bla', $this->pdoMocker->getMock('Bla'));           
+    }
+
+    public function testCustomMockClassUsingNamespaces()
+    {
+        $this->assertInstanceOf('Bla\Bla', $this->pdoMocker->getMock('Bla\Bla'));
     }
             
     public function testSelectId1()
