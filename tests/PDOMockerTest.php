@@ -242,6 +242,14 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1,$pdo->lastInsertId());        
     }
 
+    public function testLastInsertIdFromMock()
+    {
+        $pdo = $this->pdoMocker->getMock();
+        $this->assertEquals(0,$pdo->lastInsertId());
+        $pdo->setLastInsertId(1);
+        $this->assertEquals(1,$pdo->lastInsertId());
+    }
+
     public function testExecutionCount()
     {
         $sql = 'SELECT * FROM someTable WHERE id=1';

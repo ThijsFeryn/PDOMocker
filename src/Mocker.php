@@ -115,7 +115,21 @@ class Mocker
     {
         $this->lastInsertId = (int)$lastInsertId;
         return $this;
-    }    
+    }
+
+    protected function processSetLastInsertId()
+    {
+        return function() {
+           return $this->setLastInsertId(func_get_args()[0]);
+        };
+    }
+
+    protected function getLastInsertId()
+    {
+        return function() {
+            return $this->lastInsertId;
+        };
+    }
     
     public function getMock($expectedClass=null)
     {       
@@ -127,6 +141,7 @@ class Mocker
             'inTransaction', 
             'rollback', 
             'setAttribute',
+            'setLastInsertId',
             'lastInsertId');
         $constructor = array('sqlite::memory:');
 
@@ -163,10 +178,14 @@ class Mocker
         $mock->expects(new Any)
              ->method('setAttribute')
              ->will(new ReturnValue(true));
-              
+
+        $mock->expects(new Any)
+            ->method('setLastInsertId')
+            ->will(new ReturnCallback($this->processSetLastInsertId()));
+
         $mock->expects(new Any)
              ->method('lastInsertId')
-             ->will(new ReturnValue($this->lastInsertId));
+             ->will(new ReturnCallback($this->getLastInsertId()));
              
         return $mock;
     }
