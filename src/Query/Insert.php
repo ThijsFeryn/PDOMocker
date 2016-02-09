@@ -6,9 +6,7 @@ class Insert extends Query
 {
     public function execute()
     {
-        if($this->exception !== null) {
-            throw $this->exception;
-        }
+        $this->sharedExecution();
                 
         foreach($this->rows as $row) {
             $row->setVisible(true);             

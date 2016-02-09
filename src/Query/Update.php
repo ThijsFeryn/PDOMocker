@@ -23,9 +23,7 @@ class Update extends Query
     
     public function execute()
     {
-        if($this->exception !== null) {
-            throw $this->exception;
-        }        
+        $this->sharedExecution();
          
         foreach($this->rows as $index=>$row) {
             $row->setRow($this->updatedRows[$index]);               

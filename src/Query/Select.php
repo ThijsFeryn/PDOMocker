@@ -6,9 +6,7 @@ class Select extends Query
 {
     public function execute()
     {
-        if($this->exception !== null) {
-            throw $this->exception;
-        }
+        $this->sharedExecution();
         
         $rows = array();      
         foreach($this->rows as $row) {

@@ -37,7 +37,9 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
             ->registerQuery(new InsertQuery("INSERT INTO someOtherTable (id,name) VALUES(:id,:name)",[$rowTestInsert]))                
             ->registerQuery(new DeleteQuery('DELETE FROM someTable WHERE id=1',[$rowSomeValue]))                                                            
             ->registerQuery(new UpdateQuery("UPDATE someTable SET name='newValue' WHERE id=1",[$rowSomeValue],[$rowTestUpdate]))
-            ->registerQuery(new InsertQuery("INSERT INTO bla (id,name) VALUES(1,'someValue')",[],$exception));                                                                              
+            ->registerQuery(new InsertQuery("INSERT INTO bla (id,name) VALUES(1,'someValue')",[],$exception))
+            ->registerQuery(new InsertQuery("INSERT INTO foo (id,name) VALUES(1,'someValue')",[],$exception,true))
+            ->registerQuery(new InsertQuery("INSERT INTO bar (id,name) VALUES(1,'someValue')",[],null,true));
     }
     
     protected function tearDown()
@@ -232,7 +234,28 @@ class PDOMockerTest extends \PHPUnit_Framework_TestCase
         $pdo = $this->pdoMocker->getMock();        
         $pdo->query("INSERT INTO bla (id,name) VALUES(1,'someValue')");
     }
-    
+
+    /**
+ * @expectedException        PDOException
+ * @expectedExceptionMessage someError
+ */
+    public function testThrowExceptionOnSecondExecution()
+    {
+        $pdo = $this->pdoMocker->getMock();
+        $pdo->query("INSERT INTO foo (id,name) VALUES(1,'someValue')");
+        $pdo->query("INSERT INTO foo (id,name) VALUES(1,'someValue')");
+    }
+
+    /**
+     * @expectedException        Exception
+     */
+    public function testThrowExceptionOnSecondExecutionWithoutCustomException()
+    {
+        $pdo = $this->pdoMocker->getMock();
+        $pdo->query("INSERT INTO bar (id,name) VALUES(1,'someValue')");
+        $pdo->query("INSERT INTO bar (id,name) VALUES(1,'someValue')");
+    }
+
     public function testLastInsertId()
     {
         $pdo = $this->pdoMocker->getMock();
