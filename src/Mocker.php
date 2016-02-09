@@ -2,7 +2,6 @@
 namespace PDOMocker;
 use \PHPUnit_Framework_MockObject_Stub_Return as ReturnValue;
 use \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount as Any;
-use \PHPUnit_Framework_MockObject_Generator as Generator;
 use \PHPUnit_Framework_MockObject_Stub_ReturnCallback as ReturnCallback;
 
 class Mocker
@@ -131,14 +130,8 @@ class Mocker
             'lastInsertId');
         $constructor = array('sqlite::memory:');
 
-
         if(null !== $expectedClass) {
-            if(strpos($expectedClass,'\\')) {
-                $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor);
-                class_alias(get_class($mock),$expectedClass);
-            } else {
-                $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor, $expectedClass);
-            }
+            $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor, $expectedClass);
         } else {
             $mock = $this->mockGenerator->getMock('PDO', $methods, $constructor);
         }
